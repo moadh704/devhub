@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+dist/
+build/
+.vite/
+*.local
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Database
+server/prisma/*.db
+server/prisma/*.db-journal
+server/uploads/*
+!server/uploads/.gitkeep
+
+# Logs & OS
+logs/
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Coverage
+coverage/
+.nyc_output/
