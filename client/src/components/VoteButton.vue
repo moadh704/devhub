@@ -41,28 +41,28 @@ async function toggle() {
 <template>
   <button
     type="button"
-    class="group flex flex-col items-center justify-center rounded-xl border transition-all duration-200"
+    class="group flex flex-col items-center justify-center rounded-xl border transition-all duration-250 ease-expo"
     :class="[
-      size === 'lg' ? 'min-w-[4.5rem] px-3 py-2.5' : 'min-w-[3.5rem] px-2.5 py-2',
+      size === 'lg' ? 'min-w-[4.25rem] px-3 py-2.5' : 'min-w-[3.25rem] px-2 py-1.5',
       hasVoted
-        ? 'border-ember/50 bg-ember-muted text-ember-soft shadow-glow'
-        : 'border-ink-600/80 bg-ink-900/60 text-ink-200 hover:border-ember/35 hover:text-ember-soft',
-      busy ? 'opacity-70' : '',
+        ? 'border-line-accent bg-accent/15 text-indigo-200 shadow-[0_0_24px_rgba(94,106,210,0.2)]'
+        : 'border-line bg-white/[0.03] text-fg-muted hover:border-line-hover hover:bg-white/[0.06] hover:text-fg',
+      busy ? 'opacity-60' : '',
     ]"
     :disabled="busy"
     :aria-pressed="hasVoted"
     @click.stop="toggle"
   >
     <svg
-      class="transition-transform duration-200 group-hover:-translate-y-0.5 group-active:translate-y-0"
-      :class="size === 'lg' ? 'h-5 w-5' : 'h-4 w-4'"
+      class="transition-transform duration-250 ease-expo group-hover:-translate-y-0.5 group-active:translate-y-0"
+      :class="size === 'lg' ? 'h-5 w-5' : 'h-3.5 w-3.5'"
       viewBox="0 0 24 24"
       fill="currentColor"
     >
       <path d="M12 5l7 10H5l7-10z" />
     </svg>
     <span
-      class="mt-0.5 font-display font-bold tabular-nums"
+      class="mt-0.5 font-semibold tabular-nums tracking-tight"
       :class="size === 'lg' ? 'text-base' : 'text-sm'"
     >
       {{ voteCount }}

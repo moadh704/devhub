@@ -6,11 +6,11 @@ defineProps({
 </script>
 
 <template>
-  <div class="card flex flex-col items-center px-6 py-16 text-center">
+  <div class="card-static flex flex-col items-center px-6 py-16 text-center">
     <div
-      class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-ink-600 bg-ink-850 text-ember"
+      class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-accent shadow-inset"
     >
-      <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -19,8 +19,8 @@ defineProps({
         />
       </svg>
     </div>
-    <h3 class="font-display text-lg font-bold text-ink-50">{{ title }}</h3>
-    <p class="mt-2 max-w-sm text-sm text-ink-400">{{ description }}</p>
+    <h3 class="text-base font-semibold tracking-tight text-fg">{{ title }}</h3>
+    <p class="mt-2 max-w-sm text-sm leading-relaxed text-fg-muted">{{ description }}</p>
     <div v-if="$slots.default" class="mt-6">
       <slot />
     </div>

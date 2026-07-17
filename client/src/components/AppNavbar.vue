@@ -16,32 +16,32 @@ function logout() {
 
 <template>
   <header
-    class="sticky top-0 z-40 border-b border-ink-800/80 bg-ink-950/75 backdrop-blur-xl"
+    class="sticky top-0 z-40 border-b border-line bg-base/70 backdrop-blur-xl"
   >
-    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
       <RouterLink to="/" class="group flex items-center gap-2.5">
         <span
-          class="flex h-9 w-9 items-center justify-center rounded-xl bg-ink-850 ring-1 ring-ember/40 shadow-glow transition group-hover:scale-105"
+          class="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-elevated shadow-inset transition-transform duration-250 ease-expo group-hover:scale-[1.03]"
         >
-          <span class="font-display text-lg font-extrabold text-ember">D</span>
+          <span class="text-sm font-semibold text-accent">D</span>
         </span>
-        <span class="font-display text-xl font-bold tracking-tight text-ink-50">
-          Dev<span class="text-ember">Hub</span>
+        <span class="text-[15px] font-semibold tracking-tight text-fg">
+          Dev<span class="text-accent">Hub</span>
         </span>
       </RouterLink>
 
-      <nav class="hidden items-center gap-1 md:flex">
+      <nav class="hidden items-center gap-0.5 md:flex">
         <RouterLink
           to="/"
-          class="rounded-lg px-3 py-2 text-sm font-medium text-ink-300 transition hover:bg-ink-850 hover:text-ink-50"
-          active-class="!text-ink-50 !bg-ink-850"
+          class="rounded-lg px-3 py-1.5 text-sm text-fg-muted transition-all duration-250 ease-expo hover:bg-white/[0.05] hover:text-fg"
+          active-class="!text-fg !bg-white/[0.05]"
         >
           Discover
         </RouterLink>
         <RouterLink
           to="/submit"
-          class="rounded-lg px-3 py-2 text-sm font-medium text-ink-300 transition hover:bg-ink-850 hover:text-ink-50"
-          active-class="!text-ink-50 !bg-ink-850"
+          class="rounded-lg px-3 py-1.5 text-sm text-fg-muted transition-all duration-250 ease-expo hover:bg-white/[0.05] hover:text-fg"
+          active-class="!text-fg !bg-white/[0.05]"
         >
           Launch
         </RouterLink>
@@ -51,26 +51,28 @@ function logout() {
         <template v-if="auth.isAuthenticated">
           <RouterLink
             :to="`/u/${auth.user.username}`"
-            class="flex items-center gap-2 rounded-xl border border-ink-700 bg-ink-900/60 py-1.5 pl-1.5 pr-3 transition hover:border-ink-500"
+            class="flex items-center gap-2 rounded-lg border border-line bg-white/[0.03] py-1 pl-1 pr-2.5 transition-all duration-250 ease-expo hover:border-line-hover hover:bg-white/[0.06]"
           >
             <img
               :src="auth.user.avatar"
               :alt="auth.user.name"
-              class="h-7 w-7 rounded-lg bg-ink-800 object-cover"
+              class="h-6 w-6 rounded-md bg-elevated object-cover"
             />
-            <span class="text-sm font-medium text-ink-100">{{ auth.user.name }}</span>
+            <span class="text-sm font-medium text-fg">{{ auth.user.name }}</span>
           </RouterLink>
-          <button type="button" class="btn-ghost !py-2" @click="logout">Log out</button>
+          <button type="button" class="btn-ghost !py-1.5 !text-xs" @click="logout">
+            Log out
+          </button>
         </template>
         <template v-else>
-          <RouterLink to="/login" class="btn-ghost !py-2">Log in</RouterLink>
-          <RouterLink to="/register" class="btn-primary !py-2">Join free</RouterLink>
+          <RouterLink to="/login" class="btn-ghost !py-1.5">Log in</RouterLink>
+          <RouterLink to="/register" class="btn-primary !py-1.5">Join free</RouterLink>
         </template>
       </div>
 
       <button
         type="button"
-        class="btn-ghost !px-3 md:hidden"
+        class="btn-ghost !px-2.5 md:hidden"
         aria-label="Menu"
         @click="open = !open"
       >
@@ -79,22 +81,25 @@ function logout() {
             v-if="!open"
             stroke-linecap="round"
             stroke-linejoin="round"
-            stroke-width="2"
+            stroke-width="1.75"
             d="M4 7h16M4 12h16M4 17h16"
           />
           <path
             v-else
             stroke-linecap="round"
             stroke-linejoin="round"
-            stroke-width="2"
+            stroke-width="1.75"
             d="M6 6l12 12M18 6L6 18"
           />
         </svg>
       </button>
     </div>
 
-    <div v-if="open" class="border-t border-ink-800 bg-ink-950/95 px-4 py-4 md:hidden">
-      <div class="flex flex-col gap-2">
+    <div
+      v-if="open"
+      class="border-t border-line bg-base/95 px-4 py-3 backdrop-blur-xl md:hidden"
+    >
+      <div class="flex flex-col gap-1.5">
         <RouterLink to="/" class="btn-ghost justify-start" @click="open = false">
           Discover
         </RouterLink>

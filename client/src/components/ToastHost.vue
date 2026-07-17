@@ -12,11 +12,11 @@ const { toasts } = useToast();
       <div
         v-for="t in toasts"
         :key="t.id"
-        class="pointer-events-auto rounded-xl border px-4 py-3 text-sm shadow-card backdrop-blur-md"
+        class="pointer-events-auto rounded-lg border px-4 py-3 text-sm shadow-card backdrop-blur-xl"
         :class="{
-          'border-mist/30 bg-ink-850/95 text-mist': t.type === 'success',
-          'border-ember-deep/40 bg-ink-850/95 text-ember-soft': t.type === 'error',
-          'border-ink-600 bg-ink-850/95 text-ink-100': t.type === 'info',
+          'border-emerald-500/30 bg-elevated/95 text-emerald-200': t.type === 'success',
+          'border-red-500/30 bg-elevated/95 text-red-200': t.type === 'error',
+          'border-line bg-elevated/95 text-fg': t.type === 'info',
         }"
       >
         {{ t.message }}
@@ -28,11 +28,11 @@ const { toasts } = useToast();
 <style scoped>
 .toast-enter-active,
 .toast-leave-active {
-  transition: all 0.25s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .toast-enter-from,
 .toast-leave-to {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
 }
 </style>

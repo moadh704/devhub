@@ -38,12 +38,19 @@ async function submit() {
 <template>
   <div class="page-enter mx-auto flex min-h-[70vh] max-w-md flex-col justify-center">
     <div class="mb-8 text-center">
-      <h1 class="font-display text-3xl font-extrabold text-ink-50">Join DevHub</h1>
-      <p class="mt-2 text-sm text-ink-400">Create an account to launch and upvote</p>
+      <h1 class="text-3xl font-semibold tracking-tight text-fg">Join DevHub</h1>
+      <p class="mt-2 text-sm text-fg-muted">Create an account to launch and upvote</p>
     </div>
 
-    <form class="card space-y-4 p-6 sm:p-8" @submit.prevent="submit">
-      <div v-if="error" class="rounded-xl border border-ember-deep/40 bg-ember-muted px-3 py-2 text-sm text-ember-soft">
+    <form class="card-static space-y-4 p-6 sm:p-8" @submit.prevent="submit">
+      <div
+        class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent"
+      />
+
+      <div
+        v-if="error"
+        class="rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-sm text-red-200"
+      >
         {{ error }}
       </div>
 
@@ -88,9 +95,9 @@ async function submit() {
       </button>
     </form>
 
-    <p class="mt-6 text-center text-sm text-ink-400">
+    <p class="mt-6 text-center text-sm text-fg-muted">
       Already have an account?
-      <RouterLink to="/login" class="font-semibold text-ember-soft hover:underline">
+      <RouterLink to="/login" class="font-medium text-accent hover:text-accent-bright">
         Log in
       </RouterLink>
     </p>

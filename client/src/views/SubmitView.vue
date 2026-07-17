@@ -38,7 +38,7 @@ async function submit() {
       tags,
     });
 
-    toast.success('Project launched 🚀');
+    toast.success('Project launched');
     router.push({ name: 'project', params: { slug: project.slug } });
   } catch (e) {
     error.value = e.message || 'Could not launch project';
@@ -55,17 +55,24 @@ async function submit() {
 <template>
   <div class="page-enter mx-auto max-w-2xl">
     <div class="mb-8">
-      <p class="text-xs font-semibold uppercase tracking-wider text-ember">Launch</p>
-      <h1 class="mt-1 font-display text-3xl font-extrabold text-ink-50 sm:text-4xl">
+      <p class="section-label">Launch</p>
+      <h1 class="mt-2 text-3xl font-semibold tracking-tight text-fg sm:text-4xl sm:tracking-[-0.02em]">
         Ship your project
       </h1>
-      <p class="mt-2 text-ink-300">
+      <p class="mt-2 text-sm leading-relaxed text-fg-muted sm:text-base">
         Share something you built. Keep the tagline sharp — first impressions matter.
       </p>
     </div>
 
-    <form class="card space-y-5 p-6 sm:p-8" @submit.prevent="submit">
-      <div v-if="error" class="rounded-xl border border-ember-deep/40 bg-ember-muted px-4 py-3 text-sm text-ember-soft">
+    <form class="card-static space-y-5 p-6 sm:p-8" @submit.prevent="submit">
+      <div
+        class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent"
+      />
+
+      <div
+        v-if="error"
+        class="rounded-lg border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+      >
         {{ error }}
       </div>
 
@@ -105,27 +112,28 @@ async function submit() {
           <input id="url" v-model="form.url" type="url" class="input" required placeholder="https://" />
         </div>
         <div>
-          <label class="label" for="repoUrl">Repo URL <span class="normal-case text-ink-500">(optional)</span></label>
+          <label class="label" for="repoUrl">
+            Repo URL <span class="normal-case tracking-normal text-fg-muted/60">(optional)</span>
+          </label>
           <input id="repoUrl" v-model="form.repoUrl" type="url" class="input" placeholder="https://github.com/…" />
         </div>
       </div>
 
       <div>
-        <label class="label" for="imageUrl">Cover image URL <span class="normal-case text-ink-500">(optional)</span></label>
+        <label class="label" for="imageUrl">
+          Cover image URL <span class="normal-case tracking-normal text-fg-muted/60">(optional)</span>
+        </label>
         <input id="imageUrl" v-model="form.imageUrl" type="url" class="input" placeholder="https://…" />
       </div>
 
       <div>
-        <label class="label" for="tags">Tags <span class="normal-case text-ink-500">(comma-separated)</span></label>
-        <input
-          id="tags"
-          v-model="form.tags"
-          class="input"
-          placeholder="Vue, Express, Open Source"
-        />
+        <label class="label" for="tags">
+          Tags <span class="normal-case tracking-normal text-fg-muted/60">(comma-separated)</span>
+        </label>
+        <input id="tags" v-model="form.tags" class="input" placeholder="Vue, Express, Open Source" />
       </div>
 
-      <div class="flex flex-wrap items-center justify-end gap-3 border-t border-ink-700/80 pt-5">
+      <div class="flex flex-wrap items-center justify-end gap-2.5 border-t border-line pt-5">
         <RouterLink to="/" class="btn-ghost">Cancel</RouterLink>
         <button type="submit" class="btn-primary" :disabled="loading">
           {{ loading ? 'Launching…' : 'Launch project' }}
