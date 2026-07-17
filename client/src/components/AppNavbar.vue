@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 
@@ -12,14 +12,24 @@ function logout() {
   open.value = false;
   router.push({ name: 'home' });
 }
+
+function close() {
+  open.value = false;
+}
+
+watch(open, (v) => {
+  document.body.style.overflow = v ? 'hidden' : '';
+});
+
+onUnmounted(() => {
+  document.body.style.overflow = '';
+});
 </script>
 
 <template>
-  <header
-    class="sticky top-0 z-40 border-b border-line bg-base/70 backdrop-blur-xl"
-  >
+  <header class="sticky top-0 z-50 border-b border-line bg-base/70 backdrop-blur-xl">
     <div class="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-      <RouterLink to="/" class="group flex items-center gap-2.5">
+      <RouterLink to="/" class="group flex items-center gap-2.5" @click="close">
         <span
           class="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-elevated shadow-inset transition-transform duration-250 ease-expo group-hover:scale-[1.03]"
         >
@@ -30,7 +40,7 @@ function logout() {
         </span>
       </RouterLink>
 
-      <nav class="hidden items-center gap-0.5 md:flex">
+      <nav class="hidden items-center gap-0.5 md:flex" aria-label="Primary">
         <RouterLink
           to="/"
           class="rounded-lg px-3 py-1.5 text-sm text-fg-muted transition-all duration-250 ease-expo hover:bg-white/[0.05] hover:text-fg"
@@ -70,13 +80,16 @@ function logout() {
         </template>
       </div>
 
+      <!-- Mobile toggle: Menu / X -->
       <button
         type="button"
         class="btn-ghost !px-2.5 md:hidden"
-        aria-label="Menu"
+        :aria-expanded="open"
+        aria-controls="mobile-nav"
+        :aria-label="open ? 'Close menu' : 'Open menu'"
         @click="open = !open"
       >
-        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path
             v-if="!open"
             stroke-linecap="round"
@@ -95,36 +108,89 @@ function logout() {
       </button>
     </div>
 
-    <div
-      v-if="open"
-      class="border-t border-line bg-base/95 px-4 py-3 backdrop-blur-xl md:hidden"
-    >
-      <div class="flex flex-col gap-1.5">
-        <RouterLink to="/" class="btn-ghost justify-start" @click="open = false">
-          Discover
-        </RouterLink>
-        <RouterLink to="/submit" class="btn-ghost justify-start" @click="open = false">
-          Launch project
-        </RouterLink>
-        <template v-if="auth.isAuthenticated">
-          <RouterLink
-            :to="`/u/${auth.user.username}`"
-            class="btn-ghost justify-start"
-            @click="open = false"
-          >
-            Profile
-          </RouterLink>
-          <button type="button" class="btn-soft justify-start" @click="logout">Log out</button>
-        </template>
-        <template v-else>
-          <RouterLink to="/login" class="btn-ghost justify-start" @click="open = false">
-            Log in
-          </RouterLink>
-          <RouterLink to="/register" class="btn-primary justify-start" @click="open = false">
-            Join free
-          </RouterLink>
-        </template>
+    <!-- Mobile panel + backdrop -->
+    <Transition name="mobile-menu">
+      <div v-if="open" class="md:hidden">
+        <button
+          type="button"
+          class="fixed inset-0 top-14 z-40 bg-base/95 backdrop-blur-xl"
+          aria-label="Close menu backdrop"
+          @click="close"
+        />
+        <nav
+          id="mobile-nav"
+          class="relative z-50 border-t border-line bg-base/95 px-4 py-4 backdrop-blur-xl"
+          aria-label="Mobile"
+        >
+          <div class="flex flex-col gap-1">
+            <RouterLink
+              to="/"
+              class="rounded-lg px-3 py-3 text-sm font-medium text-fg-muted transition-colors duration-200 hover:bg-white/[0.05] hover:text-fg"
+              @click="close"
+            >
+              Discover
+            </RouterLink>
+            <RouterLink
+              to="/submit"
+              class="rounded-lg px-3 py-3 text-sm font-medium text-fg-muted transition-colors duration-200 hover:bg-white/[0.05] hover:text-fg"
+              @click="close"
+            >
+              Launch project
+            </RouterLink>
+            <RouterLink
+              v-if="auth.isAuthenticated"
+              :to="`/u/${auth.user.username}`"
+              class="rounded-lg px-3 py-3 text-sm font-medium text-fg-muted transition-colors duration-200 hover:bg-white/[0.05] hover:text-fg"
+              @click="close"
+            >
+              Profile
+            </RouterLink>
+            <button
+              v-if="auth.isAuthenticated"
+              type="button"
+              class="rounded-lg px-3 py-3 text-left text-sm font-medium text-fg-muted transition-colors duration-200 hover:bg-white/[0.05] hover:text-fg"
+              @click="logout"
+            >
+              Log out
+            </button>
+          </div>
+
+          <div v-if="!auth.isAuthenticated" class="mt-4 flex flex-col gap-2 border-t border-line pt-4">
+            <RouterLink to="/login" class="btn-secondary w-full" @click="close">
+              Log in
+            </RouterLink>
+            <RouterLink to="/register" class="btn-primary w-full" @click="close">
+              Join free
+            </RouterLink>
+          </div>
+          <div v-else class="mt-4 border-t border-line pt-4">
+            <RouterLink to="/submit" class="btn-primary w-full" @click="close">
+              Launch a project
+            </RouterLink>
+          </div>
+        </nav>
       </div>
-    </div>
+    </Transition>
   </header>
 </template>
+
+<style scoped>
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mobile-menu-enter-active nav,
+.mobile-menu-leave-active nav {
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mobile-menu-enter-from,
+.mobile-menu-leave-to {
+  opacity: 0;
+}
+.mobile-menu-enter-from nav,
+.mobile-menu-leave-to nav {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+</style>

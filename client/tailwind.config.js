@@ -36,15 +36,13 @@ export default {
         card:
           '0 0 0 1px rgba(255,255,255,0.06), 0 2px 20px rgba(0,0,0,0.4), 0 0 40px rgba(0,0,0,0.2)',
         'card-hover':
-          '0 0 0 1px rgba(255,255,255,0.1), 0 8px 40px rgba(0,0,0,0.5), 0 0 80px rgba(94,106,210,0.1)',
+          '0 0 0 1px rgba(255,255,255,0.1), 0 8px 40px rgba(0,0,0,0.5), 0 0 80px rgba(94,106,210,0.12)',
         cta:
           '0 0 0 1px rgba(94,106,210,0.5), 0 4px 12px rgba(94,106,210,0.3), inset 0 1px 0 0 rgba(255,255,255,0.2)',
         'cta-hover':
           '0 0 0 1px rgba(94,106,210,0.6), 0 6px 20px rgba(94,106,210,0.4), inset 0 1px 0 0 rgba(255,255,255,0.25)',
-        inset:
-          'inset 0 1px 0 0 rgba(255,255,255,0.1)',
-        ring:
-          '0 0 0 2px rgba(5,5,6,1), 0 0 0 4px rgba(94,106,210,0.55)',
+        inset: 'inset 0 1px 0 0 rgba(255,255,255,0.1)',
+        ring: '0 0 0 2px rgba(5,5,6,1), 0 0 0 4px rgba(94,106,210,0.55)',
       },
       backgroundImage: {
         noise:
@@ -67,6 +65,8 @@ export default {
       },
       transitionDuration: {
         250: '250ms',
+        300: '300ms',
+        600: '600ms',
       },
       keyframes: {
         float: {
@@ -86,7 +86,15 @@ export default {
           '100%': { backgroundPosition: '-200% center' },
         },
         fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(8px)' },
+          '0%': { opacity: '0', transform: 'translateY(24px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        menuIn: {
+          '0%': { opacity: '0', transform: 'translateY(-8px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },
@@ -95,7 +103,9 @@ export default {
         'float-slow': 'floatAlt 11s ease-in-out infinite',
         'pulse-glow': 'pulseGlow 4s ease-in-out infinite',
         shimmer: 'shimmer 4s linear infinite',
-        'fade-up': 'fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'fade-up': 'fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'scale-in': 'scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'menu-in': 'menuIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) both',
       },
     },
   },

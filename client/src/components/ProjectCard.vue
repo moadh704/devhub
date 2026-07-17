@@ -19,17 +19,14 @@ function onVote(data) {
 
 <template>
   <article
-    class="card group relative flex gap-4 p-4 sm:gap-5 sm:p-5"
+    class="card group relative flex gap-4 p-5 sm:gap-5 sm:p-6"
     @mousemove="onMove"
     @mouseleave="onLeave"
   >
-    <!-- Mouse spotlight -->
     <div
       class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-250 ease-expo"
       :style="spotlightStyle"
     />
-
-    <!-- Top edge highlight -->
     <div
       class="pointer-events-none absolute inset-x-0 top-0 z-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"
     />
@@ -87,8 +84,8 @@ function onVote(data) {
               {{ tag.name }}
             </span>
             <span class="ml-auto flex items-center gap-3 text-xs text-fg-muted">
-              <span class="inline-flex items-center gap-1">
-                <svg class="h-3.5 w-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <span class="inline-flex items-center gap-1" :title="`${project.commentCount} comments`">
+                <svg class="h-3.5 w-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -96,6 +93,7 @@ function onVote(data) {
                     d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                   />
                 </svg>
+                <span class="sr-only">Comments:</span>
                 {{ project.commentCount }}
               </span>
               <span class="inline-flex items-center gap-1.5">

@@ -41,12 +41,12 @@ async function toggle() {
 <template>
   <button
     type="button"
-    class="group flex flex-col items-center justify-center rounded-xl border transition-all duration-250 ease-expo"
+    class="group flex flex-col items-center justify-center rounded-xl border transition-all duration-250 ease-expo active:scale-[0.98]"
     :class="[
       size === 'lg' ? 'min-w-[4.25rem] px-3 py-2.5' : 'min-w-[3.25rem] px-2 py-1.5',
       hasVoted
         ? 'border-line-accent bg-accent/15 text-indigo-200 shadow-[0_0_24px_rgba(94,106,210,0.2)]'
-        : 'border-line bg-white/[0.03] text-fg-muted hover:border-line-hover hover:bg-white/[0.06] hover:text-fg',
+        : 'border-line bg-white/[0.03] text-fg-muted hover:border-line-hover hover:bg-white/[0.06] hover:text-fg hover:-translate-y-0.5',
       busy ? 'opacity-60' : '',
     ]"
     :disabled="busy"

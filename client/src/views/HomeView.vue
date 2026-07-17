@@ -1,14 +1,19 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useProjectsStore } from '@/stores/projects';
+import { useHeroParallax } from '@/composables/useHeroParallax';
+import { useReveal } from '@/composables/useReveal';
 import ProjectCard from '@/components/ProjectCard.vue';
+import FeaturedBento from '@/components/FeaturedBento.vue';
 import LoadingSkeleton from '@/components/LoadingSkeleton.vue';
 import EmptyState from '@/components/EmptyState.vue';
 
 const store = useProjectsStore();
 const route = useRoute();
 const router = useRouter();
+const { style: heroStyle } = useHeroParallax();
+const { el: feedEl, visible: feedVisible } = useReveal();
 
 const sort = ref(route.query.sort || 'hot');
 const q = ref(route.query.q || '');
@@ -21,6 +26,19 @@ const sorts = [
   { id: 'new', label: 'New' },
   { id: 'top', label: 'Top' },
 ];
+
+const showBento = computed(
+  () =>
+    !store.loading &&
+    store.projects.length >= 3 &&
+    !q.value &&
+    !tag.value &&
+    sort.value === 'hot'
+);
+
+const listProjects = computed(() =>
+  showBento.value ? store.projects.slice(5) : store.projects
+);
 
 async function load() {
   await store.fetchProjects({
@@ -79,9 +97,12 @@ watch(
 </script>
 
 <template>
-  <div class="page-enter">
-    <!-- Hero -->
-    <section class="card-static relative mb-10 overflow-hidden p-6 sm:p-10">
+  <div>
+    <!-- Hero with scroll parallax -->
+    <section
+      class="card-static relative mb-10 overflow-hidden p-6 sm:p-10 md:mb-14 md:p-12 lg:p-14"
+      :style="heroStyle"
+    >
       <div
         class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent"
       />
@@ -93,32 +114,43 @@ watch(
       />
 
       <div class="relative max-w-2xl">
-        <p class="section-label mb-4">
+        <p class="section-label mb-4 stagger-1 animate-fade-up">
           <span class="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-accent" />
           Side project launchpad
         </p>
         <h1
-          class="text-4xl font-semibold leading-none tracking-[-0.03em] sm:text-6xl sm:leading-[1.05]"
+          class="stagger-2 animate-fade-up text-4xl font-semibold leading-none tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl lg:leading-[1.02]"
         >
           <span class="text-display">Ship it.</span>
           <br />
           <span class="text-accent-shimmer">Get found.</span>
         </h1>
-        <p class="mt-5 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg">
+        <p
+          class="stagger-3 animate-fade-up mt-5 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg md:text-xl"
+        >
           DevHub is where makers launch side projects, collect real upvotes,
           and discover the next tool worth starring.
         </p>
-        <div class="mt-7 flex flex-wrap gap-3">
+        <div class="stagger-4 animate-fade-up mt-8 flex flex-wrap gap-3">
           <RouterLink to="/submit" class="btn-primary">Launch a project</RouterLink>
           <a href="#feed" class="btn-secondary">Browse the feed</a>
         </div>
       </div>
     </section>
 
+    <!-- Asymmetric featured bento -->
+    <FeaturedBento
+      v-if="showBento"
+      :projects="store.projects"
+      @vote="onVote"
+    />
+
+    <div class="section-rule mb-10" />
+
     <!-- Controls -->
     <div
       id="feed"
-      class="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+      class="mb-5 flex flex-col gap-4 scroll-mt-20 lg:flex-row lg:items-center lg:justify-between"
     >
       <div class="inline-flex rounded-lg border border-line bg-white/[0.03] p-1">
         <button
@@ -143,6 +175,7 @@ watch(
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
+          aria-hidden="true"
         >
           <path
             stroke-linecap="round"
@@ -156,13 +189,14 @@ watch(
           type="search"
           class="input !pl-10"
           placeholder="Search projects, stack, ideas…"
+          aria-label="Search projects"
           @input="onSearchInput"
         />
       </div>
     </div>
 
     <!-- Tags -->
-    <div class="mb-6 flex flex-wrap gap-2">
+    <div class="mb-8 flex flex-wrap gap-2">
       <button
         type="button"
         class="chip"
@@ -195,12 +229,24 @@ watch(
       <RouterLink to="/submit" class="btn-primary">Launch yours</RouterLink>
     </EmptyState>
 
-    <div v-else class="space-y-2.5">
+    <div
+      v-else
+      ref="feedEl"
+      class="space-y-2.5 reveal"
+      :class="{ 'is-visible': feedVisible }"
+    >
+      <p
+        v-if="showBento && listProjects.length"
+        class="section-label mb-3"
+      >
+        More on the board
+      </p>
       <ProjectCard
-        v-for="(project, i) in store.projects"
+        v-for="(project, i) in listProjects"
         :key="project.id"
         :project="project"
-        :rank="i + 1"
+        :rank="showBento ? i + 6 : i + 1"
+        :class="`stagger-${Math.min(i + 1, 6)}`"
         @vote="onVote"
       />
     </div>
