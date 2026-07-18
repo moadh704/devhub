@@ -1,60 +1,73 @@
 /** @type {import('tailwindcss').Config} */
+/** Orbit-family design tokens — keep in sync with DESIGN.md */
 export default {
   content: ['./index.html', './src/**/*.{vue,js}'],
   theme: {
     extend: {
       colors: {
-        deep: '#020203',
-        base: '#050506',
-        elevated: '#0a0a0c',
-        input: '#0F0F12',
+        deep: '#07080A',
+        base: '#0A0B0D',
+        elevated: '#111214',
+        input: '#111214',
         surface: {
-          DEFAULT: 'rgba(255,255,255,0.05)',
-          hover: 'rgba(255,255,255,0.08)',
+          DEFAULT: '#111214',
+          hover: '#16181C',
+          raised: '#1C1E22',
         },
         fg: {
-          DEFAULT: '#EDEDEF',
-          muted: '#8A8F98',
-          subtle: 'rgba(255,255,255,0.60)',
+          DEFAULT: '#E6E7EA',
+          muted: '#9CA0A8',
+          subtle: '#5A5E66',
         },
         accent: {
-          DEFAULT: '#5E6AD2',
-          bright: '#6872D9',
-          glow: 'rgba(94,106,210,0.3)',
+          DEFAULT: '#7C5CFF',
+          bright: '#8B6FFF',
+          hover: '#6B4FE0',
+          glow: 'rgba(124,92,255,0.25)',
+          dim: 'rgba(124,92,255,0.12)',
         },
         line: {
           DEFAULT: 'rgba(255,255,255,0.06)',
-          hover: 'rgba(255,255,255,0.10)',
-          accent: 'rgba(94,106,210,0.30)',
+          hover: 'rgba(255,255,255,0.12)',
+          accent: 'rgba(124,92,255,0.25)',
         },
+        success: '#22C55E',
+        warning: '#F59E0B',
+        danger: '#EF4444',
       },
       fontFamily: {
-        sans: ['Inter', 'Geist Sans', 'system-ui', 'sans-serif'],
-        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        display: ['"Bricolage Grotesque"', '"DM Sans"', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+      },
+      fontSize: {
+        base: ['13px', { lineHeight: '1.5' }],
+      },
+      borderRadius: {
+        lg: '8px',
+        xl: '12px',
+        '2xl': '12px',
       },
       boxShadow: {
-        card:
-          '0 0 0 1px rgba(255,255,255,0.06), 0 2px 20px rgba(0,0,0,0.4), 0 0 40px rgba(0,0,0,0.2)',
-        'card-hover':
-          '0 0 0 1px rgba(255,255,255,0.1), 0 8px 40px rgba(0,0,0,0.5), 0 0 80px rgba(94,106,210,0.12)',
-        cta:
-          '0 0 0 1px rgba(94,106,210,0.5), 0 4px 12px rgba(94,106,210,0.3), inset 0 1px 0 0 rgba(255,255,255,0.2)',
-        'cta-hover':
-          '0 0 0 1px rgba(94,106,210,0.6), 0 6px 20px rgba(94,106,210,0.4), inset 0 1px 0 0 rgba(255,255,255,0.25)',
-        inset: 'inset 0 1px 0 0 rgba(255,255,255,0.1)',
-        ring: '0 0 0 2px rgba(5,5,6,1), 0 0 0 4px rgba(94,106,210,0.55)',
+        // Orbit: almost no shadows on dark — keep minimal rings only
+        card: 'none',
+        'card-hover': 'none',
+        cta: 'none',
+        'cta-hover': 'none',
+        inset: 'inset 0 1px 0 0 rgba(255,255,255,0.04)',
+        ring: '0 0 0 3px rgba(124,92,255,0.12)',
       },
       backgroundImage: {
         noise:
           "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
         'depth-radial':
-          'radial-gradient(ellipse at top, #0a0a0f 0%, #050506 50%, #020203 100%)',
+          'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124,92,255,0.08) 0%, transparent 55%), #0A0B0D',
         'grid-64':
           'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
         'text-fade':
-          'linear-gradient(to bottom, #ffffff, rgba(255,255,255,0.95), rgba(255,255,255,0.7))',
+          'linear-gradient(to bottom, #E6E7EA, rgba(230,231,234,0.85))',
         'accent-shimmer':
-          'linear-gradient(90deg, #5E6AD2, #818cf8, #5E6AD2)',
+          'linear-gradient(90deg, #7C5CFF, #A78BFA, #7C5CFF)',
       },
       backgroundSize: {
         grid: '64px 64px',
@@ -70,42 +83,42 @@ export default {
       },
       keyframes: {
         float: {
-          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
-          '50%': { transform: 'translateY(-20px) rotate(1deg)' },
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-8px)' },
         },
         floatAlt: {
-          '0%, 100%': { transform: 'translateY(0) translateX(0)' },
-          '50%': { transform: 'translateY(16px) translateX(10px)' },
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(6px)' },
         },
         pulseGlow: {
-          '0%, 100%': { opacity: '0.35' },
-          '50%': { opacity: '0.7' },
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '0.65' },
         },
         shimmer: {
           '0%': { backgroundPosition: '200% center' },
           '100%': { backgroundPosition: '-200% center' },
         },
         fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(24px)' },
+          '0%': { opacity: '0', transform: 'translateY(12px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         scaleIn: {
-          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '0%': { opacity: '0', transform: 'scale(0.98)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
         },
         menuIn: {
-          '0%': { opacity: '0', transform: 'translateY(-8px)' },
+          '0%': { opacity: '0', transform: 'translateY(-6px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },
       animation: {
-        float: 'float 9s ease-in-out infinite',
-        'float-slow': 'floatAlt 11s ease-in-out infinite',
-        'pulse-glow': 'pulseGlow 4s ease-in-out infinite',
+        float: 'float 10s ease-in-out infinite',
+        'float-slow': 'floatAlt 12s ease-in-out infinite',
+        'pulse-glow': 'pulseGlow 5s ease-in-out infinite',
         shimmer: 'shimmer 4s linear infinite',
-        'fade-up': 'fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
-        'scale-in': 'scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
-        'menu-in': 'menuIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'fade-up': 'fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'scale-in': 'scaleIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'menu-in': 'menuIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) both',
       },
     },
   },

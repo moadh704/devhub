@@ -56,18 +56,18 @@ watch(() => route.params.username, load);
           class="relative h-28 bg-gradient-to-br from-accent/30 via-elevated to-deep sm:h-36"
         >
           <div
-            class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_0%,rgba(94,106,210,0.35),transparent_55%)]"
+            class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_0%,rgba(124,92,255,0.22),transparent_55%)]"
           />
         </div>
         <div class="relative px-6 pb-6 sm:px-8">
           <img
             :src="user.avatar"
             :alt="user.name"
-            class="-mt-10 h-20 w-20 rounded-2xl border-4 border-base bg-elevated object-cover shadow-card sm:h-24 sm:w-24"
+            class="-mt-10 h-20 w-20 rounded-xl border-4 border-base bg-elevated object-cover sm:h-24 sm:w-24"
           />
           <div class="mt-4 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <h1 class="text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
+              <h1 class="font-display text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
                 {{ user.name }}
               </h1>
               <p class="font-mono text-xs text-fg-muted">

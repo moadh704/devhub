@@ -120,11 +120,11 @@ watch(() => route.params.slug, load);
                 </div>
 
                 <h1
-                  class="mt-2 text-3xl font-semibold tracking-tight text-fg sm:text-4xl sm:tracking-[-0.02em]"
+                  class="mt-2 font-display text-2xl font-semibold tracking-tight text-fg sm:text-3xl sm:tracking-[-0.02em]"
                 >
                   {{ project.title }}
                 </h1>
-                <p class="mt-3 text-lg leading-relaxed text-fg-muted">{{ project.tagline }}</p>
+                <p class="mt-2 text-[15px] leading-relaxed text-fg-muted">{{ project.tagline }}</p>
 
                 <div class="mt-4 flex flex-wrap gap-2">
                   <span v-for="t in project.tags" :key="t.id" class="chip">{{ t.name }}</span>
@@ -203,9 +203,9 @@ watch(() => route.params.slug, load);
 
       <!-- Comments -->
       <section class="mt-8">
-        <h2 class="text-lg font-semibold tracking-tight text-fg">
+        <h2 class="font-display text-base font-semibold tracking-tight text-fg">
           Discussion
-          <span class="text-fg-muted font-normal">({{ comments.length }})</span>
+          <span class="font-sans text-sm font-normal text-fg-muted">({{ comments.length }})</span>
         </h2>
 
         <form class="card-static mt-4 p-4 sm:p-5" @submit.prevent="submitComment">

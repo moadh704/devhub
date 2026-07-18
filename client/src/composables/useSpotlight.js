@@ -8,7 +8,7 @@ export function useSpotlight() {
   const spotlightStyle = ref({
     opacity: 0,
     background:
-      'radial-gradient(300px circle at 50% 50%, rgba(94,106,210,0.15), transparent 60%)',
+      'radial-gradient(280px circle at 50% 50%, rgba(124,92,255,0.08), transparent 60%)',
   });
 
   function onMove(e) {
@@ -18,7 +18,7 @@ export function useSpotlight() {
     const y = e.clientY - rect.top;
     spotlightStyle.value = {
       opacity: 1,
-      background: `radial-gradient(300px circle at ${x}px ${y}px, rgba(94,106,210,0.15), transparent 60%)`,
+      background: `radial-gradient(280px circle at ${x}px ${y}px, rgba(124,92,255,0.08), transparent 60%)`,
     };
   }
 

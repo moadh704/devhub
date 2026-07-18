@@ -36,15 +36,19 @@ function fillDemo() {
 
 <template>
   <div class="page-enter mx-auto flex min-h-[70vh] max-w-md flex-col justify-center">
-    <div class="mb-8 text-center">
-      <h1 class="text-3xl font-semibold tracking-tight text-fg">Welcome back</h1>
-      <p class="mt-2 text-sm text-fg-muted">Log in to upvote and launch projects</p>
+    <div class="mb-7 text-center">
+      <div
+        class="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-elevated"
+      >
+        <span class="font-display text-sm font-semibold text-accent">D</span>
+      </div>
+      <h1 class="font-display text-2xl font-semibold tracking-tight text-fg">
+        Welcome back
+      </h1>
+      <p class="mt-1.5 text-[13px] text-fg-muted">Log in to upvote and launch projects</p>
     </div>
 
-    <form class="card-static space-y-4 p-6 sm:p-8" @submit.prevent="submit">
-      <div
-        class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent"
-      />
+    <form class="card-static space-y-4 p-6 sm:p-7" @submit.prevent="submit">
 
       <div
         v-if="error"

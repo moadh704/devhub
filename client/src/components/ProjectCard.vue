@@ -1,6 +1,5 @@
 <script setup>
 import { useTime } from '@/composables/useTime';
-import { useSpotlight } from '@/composables/useSpotlight';
 import VoteButton from '@/components/VoteButton.vue';
 
 const props = defineProps({
@@ -10,7 +9,6 @@ const props = defineProps({
 
 const emit = defineEmits(['vote']);
 const { timeAgo } = useTime();
-const { spotlightStyle, onMove, onLeave } = useSpotlight();
 
 function onVote(data) {
   emit('vote', { id: props.project.id, ...data });
@@ -19,31 +17,23 @@ function onVote(data) {
 
 <template>
   <article
-    class="card group relative flex gap-4 p-5 sm:gap-5 sm:p-6"
-    @mousemove="onMove"
-    @mouseleave="onLeave"
+    class="group flex items-start gap-3 rounded-xl border border-line bg-elevated p-3.5 transition-colors duration-150 hover:border-line-hover hover:bg-surface-hover sm:gap-4 sm:p-4"
   >
-    <div
-      class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-250 ease-expo"
-      :style="spotlightStyle"
-    />
-    <div
-      class="pointer-events-none absolute inset-x-0 top-0 z-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"
-    />
-
+    <!-- Rank -->
     <div
       v-if="rank != null"
-      class="relative z-10 hidden w-7 shrink-0 flex-col items-center pt-1.5 sm:flex"
+      class="hidden w-6 shrink-0 pt-2 text-center sm:block"
     >
       <span
-        class="text-sm font-semibold tabular-nums"
-        :class="rank <= 3 ? 'text-accent' : 'text-fg-muted/50'"
+        class="font-mono text-[12px] tabular-nums"
+        :class="rank <= 3 ? 'font-medium text-accent' : 'text-fg-subtle'"
       >
-        {{ String(rank).padStart(2, '0') }}
+        {{ rank }}
       </span>
     </div>
 
-    <div class="relative z-10">
+    <!-- Vote -->
+    <div class="shrink-0">
       <VoteButton
         :project-id="project.id"
         :vote-count="project.voteCount"
@@ -52,58 +42,73 @@ function onVote(data) {
       />
     </div>
 
-    <RouterLink :to="`/project/${project.slug}`" class="relative z-10 min-w-0 flex-1">
-      <div class="flex gap-4">
-        <div
-          class="hidden h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-elevated sm:block"
-        >
-          <img
-            :src="project.imageUrl"
-            :alt="project.title"
-            class="h-full w-full object-cover transition duration-300 ease-expo group-hover:scale-[1.04]"
-            loading="lazy"
-          />
-        </div>
+    <!-- Thumbnail -->
+    <RouterLink
+      :to="`/project/${project.slug}`"
+      class="hidden h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-line bg-surface-raised sm:block"
+    >
+      <img
+        :src="project.imageUrl"
+        :alt="project.title"
+        class="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+        loading="lazy"
+      />
+    </RouterLink>
 
-        <div class="min-w-0 flex-1">
-          <div class="flex flex-wrap items-start justify-between gap-2">
-            <h2
-              class="text-base font-semibold tracking-tight text-fg transition-colors duration-250 group-hover:text-white sm:text-lg"
-            >
-              {{ project.title }}
-            </h2>
-            <span class="font-mono text-[11px] text-fg-muted">{{ timeAgo(project.createdAt) }}</span>
-          </div>
-
-          <p class="mt-1 line-clamp-2 text-sm leading-relaxed text-fg-muted">
+    <!-- Content -->
+    <div class="min-w-0 flex-1">
+      <div class="flex items-start justify-between gap-3">
+        <RouterLink :to="`/project/${project.slug}`" class="min-w-0">
+          <h2
+            class="font-display text-[14px] font-semibold tracking-tight text-fg transition-colors group-hover:text-white sm:text-[15px]"
+          >
+            {{ project.title }}
+          </h2>
+          <p class="mt-0.5 line-clamp-2 text-[13px] leading-snug text-fg-muted">
             {{ project.tagline }}
           </p>
-
-          <div class="mt-3 flex flex-wrap items-center gap-2">
-            <span v-for="tag in project.tags" :key="tag.id" class="chip">
-              {{ tag.name }}
-            </span>
-            <span class="ml-auto flex items-center gap-3 text-xs text-fg-muted">
-              <span class="inline-flex items-center gap-1" :title="`${project.commentCount} comments`">
-                <svg class="h-3.5 w-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.75"
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-                <span class="sr-only">Comments:</span>
-                {{ project.commentCount }}
-              </span>
-              <span class="inline-flex items-center gap-1.5">
-                <img :src="project.author.avatar" class="h-4 w-4 rounded" alt="" />
-                {{ project.author.username }}
-              </span>
-            </span>
-          </div>
-        </div>
+        </RouterLink>
+        <span class="hidden shrink-0 font-mono text-[10px] text-fg-subtle sm:inline">
+          {{ timeAgo(project.createdAt) }}
+        </span>
       </div>
-    </RouterLink>
+
+      <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+        <div class="flex flex-wrap gap-1">
+          <span
+            v-for="t in project.tags.slice(0, 3)"
+            :key="t.id"
+            class="rounded-md border border-line bg-white/[0.02] px-1.5 py-0.5 text-[11px] text-fg-muted"
+          >
+            {{ t.name }}
+          </span>
+        </div>
+        <span class="flex items-center gap-2 text-[12px] text-fg-subtle">
+          <span class="inline-flex items-center gap-1">
+            <svg class="h-3.5 w-3.5 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
+            </svg>
+            {{ project.commentCount }}
+          </span>
+          <RouterLink
+            :to="`/u/${project.author.username}`"
+            class="inline-flex items-center gap-1.5 hover:text-fg"
+            @click.stop
+          >
+            <img
+              :src="project.author.avatar"
+              class="h-4 w-4 rounded border border-line object-cover"
+              alt=""
+            />
+            {{ project.author.username }}
+          </RouterLink>
+        </span>
+      </div>
+    </div>
   </article>
 </template>

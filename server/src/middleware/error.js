@@ -20,7 +20,12 @@ export function errorHandler(err, _req, res, _next) {
     return res.status(err.status).json({ error: err.message });
   }
 
-  res.status(500).json({ error: err.message || 'Internal server error' });
+  // Avoid leaking internals in production
+  const message =
+    process.env.NODE_ENV === 'production'
+      ? 'Internal server error'
+      : err.message || 'Internal server error';
+  res.status(500).json({ error: message });
 }
 
 export function createError(status, message) {

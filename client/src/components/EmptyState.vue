@@ -6,9 +6,9 @@ defineProps({
 </script>
 
 <template>
-  <div class="card-static flex flex-col items-center px-6 py-16 text-center">
+  <div class="card-static flex flex-col items-center px-6 py-14 text-center">
     <div
-      class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-accent shadow-inset"
+      class="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-elevated text-accent"
     >
       <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path
@@ -19,9 +19,9 @@ defineProps({
         />
       </svg>
     </div>
-    <h3 class="text-base font-semibold tracking-tight text-fg">{{ title }}</h3>
-    <p class="mt-2 max-w-sm text-sm leading-relaxed text-fg-muted">{{ description }}</p>
-    <div v-if="$slots.default" class="mt-6">
+    <h3 class="font-display text-[15px] font-semibold tracking-tight text-fg">{{ title }}</h3>
+    <p class="mt-1.5 max-w-sm text-[13px] leading-relaxed text-fg-muted">{{ description }}</p>
+    <div v-if="$slots.default" class="mt-5">
       <slot />
     </div>
   </div>

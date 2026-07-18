@@ -38,14 +38,13 @@ async function submit() {
 <template>
   <div class="page-enter mx-auto flex min-h-[70vh] max-w-md flex-col justify-center">
     <div class="mb-8 text-center">
-      <h1 class="text-3xl font-semibold tracking-tight text-fg">Join DevHub</h1>
-      <p class="mt-2 text-sm text-fg-muted">Create an account to launch and upvote</p>
+      <h1 class="font-display text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
+        Join DevHub
+      </h1>
+      <p class="mt-2 text-[13px] text-fg-muted">Create an account to launch and upvote</p>
     </div>
 
     <form class="card-static space-y-4 p-6 sm:p-8" @submit.prevent="submit">
-      <div
-        class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent"
-      />
 
       <div
         v-if="error"

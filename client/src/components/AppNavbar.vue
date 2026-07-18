@@ -27,63 +27,66 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header class="sticky top-0 z-50 border-b border-line bg-base/70 backdrop-blur-xl">
-    <div class="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-      <RouterLink to="/" class="group flex items-center gap-2.5" @click="close">
+  <header class="sticky top-0 z-50 border-b border-line bg-base/90 backdrop-blur-md">
+    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <!-- Brand -->
+      <RouterLink to="/" class="group flex items-center gap-3" @click="close">
         <span
-          class="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-elevated shadow-inset transition-transform duration-250 ease-expo group-hover:scale-[1.03]"
+          class="flex h-9 w-9 items-center justify-center rounded-xl border border-line bg-elevated transition-colors duration-150 group-hover:border-line-hover group-hover:bg-surface-hover"
         >
-          <span class="text-sm font-semibold text-accent">D</span>
+          <span class="font-display text-sm font-semibold text-accent">D</span>
         </span>
-        <span class="text-[15px] font-semibold tracking-tight text-fg">
+        <span class="font-display text-base font-semibold tracking-tight text-fg sm:text-[17px]">
           Dev<span class="text-accent">Hub</span>
         </span>
       </RouterLink>
 
-      <nav class="hidden items-center gap-0.5 md:flex" aria-label="Primary">
+      <!-- Center nav -->
+      <nav class="hidden items-center gap-1 md:flex" aria-label="Primary">
         <RouterLink
           to="/"
-          class="rounded-lg px-3 py-1.5 text-sm text-fg-muted transition-all duration-250 ease-expo hover:bg-white/[0.05] hover:text-fg"
-          active-class="!text-fg !bg-white/[0.05]"
+          class="rounded-lg px-3.5 py-2 text-[14px] font-medium text-fg-muted transition-colors duration-150 hover:bg-white/[0.05] hover:text-fg"
+          active-class="!bg-white/[0.06] !text-fg"
         >
           Discover
         </RouterLink>
         <RouterLink
           to="/submit"
-          class="rounded-lg px-3 py-1.5 text-sm text-fg-muted transition-all duration-250 ease-expo hover:bg-white/[0.05] hover:text-fg"
-          active-class="!text-fg !bg-white/[0.05]"
+          class="rounded-lg px-3.5 py-2 text-[14px] font-medium text-fg-muted transition-colors duration-150 hover:bg-white/[0.05] hover:text-fg"
+          active-class="!bg-white/[0.06] !text-fg"
         >
           Launch
         </RouterLink>
       </nav>
 
-      <div class="hidden items-center gap-2 md:flex">
+      <!-- Auth actions -->
+      <div class="hidden items-center gap-2.5 md:flex">
         <template v-if="auth.isAuthenticated">
           <RouterLink
             :to="`/u/${auth.user.username}`"
-            class="flex items-center gap-2 rounded-lg border border-line bg-white/[0.03] py-1 pl-1 pr-2.5 transition-all duration-250 ease-expo hover:border-line-hover hover:bg-white/[0.06]"
+            class="flex items-center gap-2.5 rounded-xl border border-line bg-elevated py-1.5 pl-1.5 pr-3 transition-colors duration-150 hover:border-line-hover hover:bg-surface-hover"
           >
             <img
               :src="auth.user.avatar"
               :alt="auth.user.name"
-              class="h-6 w-6 rounded-md bg-elevated object-cover"
+              class="h-7 w-7 rounded-lg bg-surface-raised object-cover"
             />
-            <span class="text-sm font-medium text-fg">{{ auth.user.name }}</span>
+            <span class="text-[14px] font-medium text-fg">{{ auth.user.name }}</span>
           </RouterLink>
-          <button type="button" class="btn-ghost !py-1.5 !text-xs" @click="logout">
+          <button type="button" class="btn-ghost !h-9 !px-3 !text-[13px]" @click="logout">
             Log out
           </button>
         </template>
         <template v-else>
-          <RouterLink to="/login" class="btn-ghost !py-1.5">Log in</RouterLink>
-          <RouterLink to="/register" class="btn-primary !py-1.5">Join free</RouterLink>
+          <RouterLink to="/login" class="btn-ghost !h-9 !px-3.5 !text-[14px]">Log in</RouterLink>
+          <RouterLink to="/register" class="btn-primary !h-9 !px-4 !text-[14px]">Join free</RouterLink>
         </template>
       </div>
 
-      <!-- Mobile toggle: Menu / X -->
+      <!-- Mobile toggle -->
       <button
         type="button"
-        class="btn-ghost !px-2.5 md:hidden"
+        class="btn-ghost !h-10 !w-10 !px-0 md:hidden"
         :aria-expanded="open"
         aria-controls="mobile-nav"
         :aria-label="open ? 'Close menu' : 'Open menu'"
@@ -108,12 +111,12 @@ onUnmounted(() => {
       </button>
     </div>
 
-    <!-- Mobile panel + backdrop -->
+    <!-- Mobile panel -->
     <Transition name="mobile-menu">
       <div v-if="open" class="md:hidden">
         <button
           type="button"
-          class="fixed inset-0 top-14 z-40 bg-base/95 backdrop-blur-xl"
+          class="fixed inset-0 top-16 z-40 bg-base/95 backdrop-blur-xl"
           aria-label="Close menu backdrop"
           @click="close"
         />
@@ -125,14 +128,14 @@ onUnmounted(() => {
           <div class="flex flex-col gap-1">
             <RouterLink
               to="/"
-              class="rounded-lg px-3 py-3 text-sm font-medium text-fg-muted transition-colors duration-200 hover:bg-white/[0.05] hover:text-fg"
+              class="rounded-lg px-3 py-3 text-[15px] font-medium text-fg-muted transition-colors hover:bg-white/[0.05] hover:text-fg"
               @click="close"
             >
               Discover
             </RouterLink>
             <RouterLink
               to="/submit"
-              class="rounded-lg px-3 py-3 text-sm font-medium text-fg-muted transition-colors duration-200 hover:bg-white/[0.05] hover:text-fg"
+              class="rounded-lg px-3 py-3 text-[15px] font-medium text-fg-muted transition-colors hover:bg-white/[0.05] hover:text-fg"
               @click="close"
             >
               Launch project
@@ -140,7 +143,7 @@ onUnmounted(() => {
             <RouterLink
               v-if="auth.isAuthenticated"
               :to="`/u/${auth.user.username}`"
-              class="rounded-lg px-3 py-3 text-sm font-medium text-fg-muted transition-colors duration-200 hover:bg-white/[0.05] hover:text-fg"
+              class="rounded-lg px-3 py-3 text-[15px] font-medium text-fg-muted transition-colors hover:bg-white/[0.05] hover:text-fg"
               @click="close"
             >
               Profile
@@ -148,7 +151,7 @@ onUnmounted(() => {
             <button
               v-if="auth.isAuthenticated"
               type="button"
-              class="rounded-lg px-3 py-3 text-left text-sm font-medium text-fg-muted transition-colors duration-200 hover:bg-white/[0.05] hover:text-fg"
+              class="rounded-lg px-3 py-3 text-left text-[15px] font-medium text-fg-muted transition-colors hover:bg-white/[0.05] hover:text-fg"
               @click="logout"
             >
               Log out
@@ -156,15 +159,15 @@ onUnmounted(() => {
           </div>
 
           <div v-if="!auth.isAuthenticated" class="mt-4 flex flex-col gap-2 border-t border-line pt-4">
-            <RouterLink to="/login" class="btn-secondary w-full" @click="close">
+            <RouterLink to="/login" class="btn-secondary w-full !h-10" @click="close">
               Log in
             </RouterLink>
-            <RouterLink to="/register" class="btn-primary w-full" @click="close">
+            <RouterLink to="/register" class="btn-primary w-full !h-10" @click="close">
               Join free
             </RouterLink>
           </div>
           <div v-else class="mt-4 border-t border-line pt-4">
-            <RouterLink to="/submit" class="btn-primary w-full" @click="close">
+            <RouterLink to="/submit" class="btn-primary w-full !h-10" @click="close">
               Launch a project
             </RouterLink>
           </div>

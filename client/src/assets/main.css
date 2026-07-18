@@ -2,27 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Orbit-family CSS variables */
+:root,
+[data-theme='dark'] {
+  --bg-app: #0a0b0d;
+  --bg-card: #111214;
+  --bg-card-hover: #16181c;
+  --bg-elevated: #1c1e22;
+  --bg-input: #111214;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --text-primary: #e6e7ea;
+  --text-secondary: #9ca0a8;
+  --text-muted: #5a5e66;
+  --accent: #7c5cff;
+  --accent-hover: #6b4fe0;
+  --accent-dim: rgba(124, 92, 255, 0.12);
+  --accent-border: rgba(124, 92, 255, 0.25);
+}
+
 @layer base {
   html {
     @apply scroll-smooth antialiased;
+    font-size: 13px;
   }
 
   body {
     @apply min-h-screen bg-base font-sans text-fg;
     background-image: theme('backgroundImage.depth-radial');
     background-attachment: fixed;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-[-0.02em] text-fg;
+    line-height: 1.2;
+    font-feature-settings: 'ss01', 'ss02', 'kern';
   }
 
   ::selection {
-    background: rgba(94, 106, 210, 0.35);
-    color: #EDEDEF;
+    background: rgba(124, 92, 255, 0.32);
+    color: #e6e7ea;
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-accent/50 ring-offset-2 ring-offset-base;
+    @apply outline-none ring-2 ring-accent/40 ring-offset-2 ring-offset-base;
   }
 
-  /* Accessibility: kill decorative motion */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -39,113 +72,96 @@
 }
 
 @layer components {
-  /* Buttons — Linear precision */
+  /* Buttons — Orbit: 8px radius, compact height */
   .btn {
-    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden
-      rounded-lg px-4 py-2.5 text-sm font-medium
-      transition-all duration-250 ease-expo
+    @apply relative inline-flex h-9 items-center justify-center gap-1.5
+      rounded-lg px-3 text-[13px] font-medium
+      transition-all duration-150 ease-expo
       disabled:pointer-events-none disabled:opacity-45;
   }
 
+  .btn:active {
+    transform: translateY(1px);
+    filter: brightness(0.96);
+  }
+
   .btn-primary {
-    @apply btn bg-accent text-white shadow-cta
-      hover:bg-accent-bright hover:shadow-cta-hover
-      active:scale-[0.98];
-  }
-
-  .btn-primary::after {
-    content: '';
-    @apply pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-250;
-    background: linear-gradient(
-      105deg,
-      transparent 40%,
-      rgba(255, 255, 255, 0.18) 50%,
-      transparent 60%
-    );
-  }
-
-  .btn-primary:hover::after {
-    @apply opacity-100;
+    @apply btn bg-accent text-white
+      hover:brightness-110;
   }
 
   .btn-secondary {
-    @apply btn bg-white/[0.05] text-fg shadow-inset
-      hover:bg-white/[0.08]
-      active:scale-[0.98];
+    @apply btn border border-line bg-transparent text-fg
+      hover:border-line-hover hover:bg-surface-hover;
   }
 
   .btn-ghost {
     @apply btn bg-transparent text-fg-muted
-      hover:bg-white/[0.05] hover:text-fg
-      active:scale-[0.98];
+      hover:bg-surface-hover hover:text-fg;
   }
 
   .btn-soft {
-    @apply btn border border-line-accent bg-accent/10 text-indigo-200
-      hover:bg-accent/20 hover:border-accent/40
-      active:scale-[0.98];
+    @apply btn border border-line-accent bg-accent/10 text-fg
+      hover:bg-accent/15;
   }
 
   /* Form */
   .input {
-    @apply w-full rounded-lg border border-white/10 bg-input
-      px-3.5 py-2.5 text-sm text-gray-100
-      placeholder:text-gray-500
-      transition-all duration-250 ease-expo
-      focus:border-accent focus:outline-none focus:ring-0;
+    @apply h-9 w-full rounded-lg border border-line bg-input
+      px-3 text-[13px] text-fg
+      placeholder:text-fg-subtle
+      transition-all duration-150 ease-expo
+      focus:border-line-accent focus:outline-none focus:ring-0;
   }
 
   .input:focus {
-    box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.22);
+    box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.12);
+  }
+
+  textarea.input {
+    @apply h-auto min-h-[80px] py-2 leading-relaxed;
   }
 
   .label {
-    @apply mb-1.5 block font-mono text-[11px] font-medium uppercase tracking-widest text-fg-muted;
+    @apply mb-1.5 block font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-fg-subtle;
   }
 
-  /* Cards — multi-layer depth + precise lift */
+  /* Cards — elevation via brightness, not shadows */
   .card {
-    @apply relative overflow-hidden rounded-2xl border border-line
-      bg-gradient-to-b from-white/[0.08] to-white/[0.02]
-      shadow-card transition-all duration-300 ease-expo;
+    @apply relative overflow-hidden rounded-xl border border-line bg-elevated
+      transition-all duration-150 ease-expo;
   }
 
   .card:hover {
-    @apply -translate-y-1 border-line-hover shadow-card-hover;
-  }
-
-  .card:active {
-    @apply translate-y-0 scale-[0.99] shadow-card;
+    @apply border-line-hover bg-surface-hover;
   }
 
   .card-static {
-    @apply relative overflow-hidden rounded-2xl border border-line
-      bg-gradient-to-b from-white/[0.08] to-white/[0.02] shadow-card;
+    @apply relative overflow-hidden rounded-xl border border-line bg-elevated;
   }
 
   .card-glass {
-    @apply card bg-white/[0.03] backdrop-blur-xl;
+    @apply card bg-elevated/90 backdrop-blur-md;
   }
 
   /* Chips / badges */
   .chip {
-    @apply inline-flex items-center rounded-full border border-white/10
-      bg-white/[0.04] px-2.5 py-0.5 text-xs font-medium text-fg-muted
-      transition-all duration-250 ease-expo
-      hover:border-line-accent hover:text-fg;
+    @apply inline-flex h-[22px] items-center rounded-full border border-line
+      bg-white/[0.03] px-2.5 text-[11px] font-medium uppercase tracking-[0.04em] text-fg-muted
+      transition-all duration-150 ease-expo
+      hover:border-line-hover hover:text-fg;
   }
 
   .chip-active {
-    @apply border-line-accent bg-accent/15 text-indigo-200;
+    @apply border-line-accent bg-accent/15 text-fg;
   }
 
-  /* Type helpers */
   .text-display {
-    @apply bg-text-fade bg-clip-text font-semibold tracking-[-0.03em] text-transparent;
+    @apply font-display font-semibold tracking-[-0.03em] text-fg;
   }
 
   .text-accent-shimmer {
-    @apply animate-shimmer bg-accent-shimmer bg-shimmer bg-clip-text font-semibold text-transparent;
+    @apply font-display font-semibold text-accent;
   }
 
   .page-enter {
@@ -153,21 +169,19 @@
   }
 
   .section-label {
-    @apply inline-flex items-center gap-2 font-mono text-[11px] font-medium uppercase tracking-widest text-fg-muted;
+    @apply inline-flex items-center gap-2 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-fg-subtle;
   }
 
-  /* Section chrome */
   .section-rule {
     @apply h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent;
   }
 
   .section-pad {
-    @apply py-16 md:py-24 lg:py-32;
+    @apply py-12 md:py-16 lg:py-20;
   }
 
-  /* Scroll reveal (toggled via .is-visible) */
   .reveal {
-    @apply translate-y-6 opacity-0 transition-all duration-[600ms] ease-expo;
+    @apply translate-y-3 opacity-0 transition-all duration-500 ease-expo;
   }
 
   .reveal.is-visible {
@@ -175,7 +189,7 @@
   }
 
   .reveal-scale {
-    @apply scale-95 opacity-0 transition-all duration-[600ms] ease-expo;
+    @apply scale-[0.98] opacity-0 transition-all duration-500 ease-expo;
   }
 
   .reveal-scale.is-visible {
@@ -183,15 +197,31 @@
   }
 }
 
-/* Stagger delays for children */
-.stagger-1 { transition-delay: 0.08s; animation-delay: 0.08s; }
-.stagger-2 { transition-delay: 0.16s; animation-delay: 0.16s; }
-.stagger-3 { transition-delay: 0.24s; animation-delay: 0.24s; }
-.stagger-4 { transition-delay: 0.32s; animation-delay: 0.32s; }
-.stagger-5 { transition-delay: 0.40s; animation-delay: 0.40s; }
-.stagger-6 { transition-delay: 0.48s; animation-delay: 0.48s; }
+.stagger-1 {
+  transition-delay: 0.06s;
+  animation-delay: 0.06s;
+}
+.stagger-2 {
+  transition-delay: 0.12s;
+  animation-delay: 0.12s;
+}
+.stagger-3 {
+  transition-delay: 0.18s;
+  animation-delay: 0.18s;
+}
+.stagger-4 {
+  transition-delay: 0.24s;
+  animation-delay: 0.24s;
+}
+.stagger-5 {
+  transition-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+.stagger-6 {
+  transition-delay: 0.36s;
+  animation-delay: 0.36s;
+}
 
-/* Reduced motion: show reveals immediately, kill floats */
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-scale {
@@ -207,19 +237,18 @@
   }
 }
 
-/* Scrollbar — app-like */
+/* Scrollbar — Orbit thin */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #050506;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 999px;
-  border: 2px solid #050506;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.18);
 }
