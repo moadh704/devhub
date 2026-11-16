@@ -129,7 +129,7 @@ function slugify(text) {
     .replace(/(^-|-$)/g, '');
 }
 
-async function main() {
+export async function seed() {
   console.log('Seeding DevHub…');
 
   await prisma.comment.deleteMany();
@@ -236,13 +236,18 @@ async function main() {
 
   console.log('Seed complete.');
   console.log('Demo logins: alex@devhub.app / password123');
+  await prisma.$disconnect();
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+const isDirect = process.argv[1] && process.argv[1].endsWith('seed.js');
+if (isDirect) {
+  seed()
+    .catch((e) => {
+      console.error(e);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}
+

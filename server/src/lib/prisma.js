@@ -1,5 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = 'file:/tmp/devhub.sqlite';
+}
+process.env.JWT_SECRET = process.env.JWT_SECRET || 'light-demo-jwt-secret-devhub';
+
 const globalForPrisma = globalThis;
 
 export const prisma =

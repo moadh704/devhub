@@ -6,19 +6,21 @@ import morgan from 'morgan';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-
-import authRoutes from './routes/auth.js';
-import projectRoutes from './routes/projects.js';
-import tagRoutes from './routes/tags.js';
-import userRoutes from './routes/users.js';
+import { ensureDatabase, persistDatabase } from './bootstrap.js';
 import { errorHandler, notFound } from './middleware/error.js';
+
+await ensureDatabase();
+
+const authRoutes = (await import('./routes/auth.js')).default;
+const projectRoutes = (await import('./routes/projects.js')).default;
+const tagRoutes = (await import('./routes/tags.js')).default;
+const userRoutes = (await import('./routes/users.js')).default;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 4000;
 const isProd = process.env.NODE_ENV === 'production';
 
-// Client dist for single-service deploy (Express serves Vue build)
 const clientDist = path.join(__dirname, '../../client/dist');
 const serveSpa = process.env.SERVE_SPA !== 'false' && fs.existsSync(clientDist);
 
@@ -41,12 +43,9 @@ const allowedOrigins = [
 app.use(
   cors({
     origin(origin, cb) {
-      // same-origin SPA / curl / server-to-server have no Origin
       if (!origin) return cb(null, true);
       if (allowedOrigins.includes(origin)) return cb(null, true);
-      if (origin.endsWith('.onrender.com') || origin.endsWith('.vercel.app')) {
-        return cb(null, true);
-      }
+      if (origin.endsWith('.onrender.com') || origin.endsWith('.vercel.app')) return cb(null, true);
       return cb(new Error('Not allowed by CORS'));
     },
     credentials: true,
@@ -56,6 +55,15 @@ app.use(
 app.use(morgan(isProd ? 'combined' : 'dev'));
 app.use(express.json({ limit: '1mb' }));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+app.use((req, res, next) => {
+  if (!['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) return next();
+  const end = res.end.bind(res);
+  res.end = (...args) => {
+    persistDatabase().catch((err) => console.error('blob save', err.message)).finally(() => end(...args));
+  };
+  next();
+});
 
 app.get('/api/health', (_req, res) => {
   res.json({
@@ -71,19 +79,21 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/users', userRoutes);
 
-// Production: serve Vue SPA from same origin (one free Render URL)
 if (serveSpa) {
   app.use(express.static(clientDist, { index: false }));
   app.get(/^(?!\/api)(?!\/uploads).*/, (_req, res) => {
     res.sendFile(path.join(clientDist, 'index.html'));
   });
-  console.log('Serving SPA from', clientDist);
-} else {
+} else if (!process.env.VERCEL) {
   app.use(notFound);
 }
 
 app.use(errorHandler);
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`\n  DevHub API running on http://localhost:${PORT} (SPA: ${serveSpa})\n`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`DevHub API running on http://localhost:${PORT} (SPA: ${serveSpa})`);
+  });
+}
+
+export default app;
